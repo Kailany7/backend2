@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import colaboradoresRoutes from "./routes/colaboradores.routes.js"; // IMPORTANTE
 
 dotenv.config();
 
@@ -9,13 +8,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Rota simples só para testar
+// Rota simples só para testar que o backend está funcionando
 app.get("/", (req, res) => {
-  res.send("Backend está rodando!");
+  res.send("Backend está rodando! ");
 });
-
-// Aqui registramos as rotas do módulo de colaboradores
-app.use("/api/colaboradores", colaboradoresRoutes);
 
 // Porta
 const PORT = process.env.PORT || 3000;
