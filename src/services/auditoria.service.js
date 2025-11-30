@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabase.js";
+import { db } from "../config/database.js";
 
 class AuditoriaService {
     async listar() {
