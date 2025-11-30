@@ -1,20 +1,12 @@
-import { db } from "../config/database.js";
+import AuditoriaModel from "../models/auditoria.model.js";
 
 class AuditoriaService {
     async listar() {
-        const { data, error } = await supabase.from("auditoria_ponto").select("*");
-
-        if (error) throw error;
-        return data;
+        return AuditoriaModel.listar();
     }
 
-    async criar(auditoria) {
-        const { data, error } = await supabase
-            .from("auditoria_ponto")
-            .insert([auditoria]);
-
-        if (error) throw error;
-        return data;
+    async criar(data) {
+        return AuditoriaModel.criar(data);
     }
 }
 

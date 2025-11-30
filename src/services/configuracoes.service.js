@@ -1,25 +1,12 @@
-import { db } from "../config/database.js";
+import ConfiguracoesModel from "../models/configuracoes.model.js";
 
 class ConfiguracoesService {
     async buscarPorChave(chave) {
-        const { data, error } = await supabase
-            .from("configuracoes")
-            .select("*")
-            .eq("chave", chave)
-            .single();
-
-        if (error) throw error;
-        return data;
+        return ConfiguracoesModel.buscarPorChave(chave);
     }
 
-    async atualizar(chave, nova) {
-        const { data, error } = await supabase
-            .from("configuracoes")
-            .update(nova)
-            .eq("chave", chave);
-
-        if (error) throw error;
-        return data;
+    async atualizar(chave, dados) {
+        return ConfiguracoesModel.atualizar(chave, dados.valor);
     }
 }
 
