@@ -1,12 +1,18 @@
-import ConfiguracoesModel from "../models/configuracoes.model.js";
+import ConfigModel from "../models/configuracoes.model.js";
 
 class ConfiguracoesService {
     async buscarPorChave(chave) {
-        return ConfiguracoesModel.buscarPorChave(chave);
+        return await ConfigModel.buscar(chave);
     }
 
-    async atualizar(chave, dados) {
-        return ConfiguracoesModel.atualizar(chave, dados.valor);
+    async atualizar(chave, novoValor) {
+        return await ConfigModel.atualizar(chave, novoValor);
+    }
+
+    // 👉 SALVA A FOTO NO BANCO
+    async salvarFotoPerfil(caminhoLocal) {
+        const chave = "foto_perfil";
+        return await ConfigModel.salvarFoto(chave, caminhoLocal);
     }
 }
 
