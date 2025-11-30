@@ -1,9 +1,16 @@
-import express from "express";
-import { register, login } from "../controllers/auth.controller.js";
+import { Router } from "express";
+import {
+  listar,
+  criar,
+  atualizar,
+  remover,
+} from "../controllers/colaborador.controller.js";
 
-const router = express.Router();
+const router = Router();
 
-router.post("/register", register);
-router.post("/login", login);
+router.get("/", listar);
+router.post("/", criar);
+router.put("/:id", atualizar);
+router.delete("/:id", remover);
 
 export default router;

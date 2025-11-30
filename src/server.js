@@ -4,15 +4,20 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+import colaboradorRoutes from "./routes/colaborador.routes.js";
+
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-// Rota simples só para testar que o backend está funcionando
 app.get("/", (req, res) => {
-  res.send("Backend está rodando! ");
+  res.send("API funcionando com Supabase!");
 });
 
-// Porta
+app.use("/api/colaboradores", colaboradorRoutes);
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Servidor rodando na porta ${PORT}`)
+);
