@@ -5,7 +5,7 @@ dotenv.config();
 
 const { Pool } = pkg;
 
-export const db = new Pool({
+const db = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
@@ -21,4 +21,4 @@ db.connect()
   .then(() => console.log("🔥 Conectado ao banco do Supabase!"))
   .catch(err => console.error("❌ Erro ao conectar no Supabase:", err));
 
-  export default Pool;
+export default db;
