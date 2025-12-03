@@ -1,6 +1,6 @@
 import { Router } from "express";
 import ConfiguracoesController from "../controllers/configuracoes.controller.js";
-import { upload } from "../utils/upload.js";
+import { upload } from "../utils/upload.js"; // usa a configuração correta
 
 const router = Router();
 
@@ -13,7 +13,7 @@ router.get("/:chave", ConfiguracoesController.buscar);
 // 👉 Atualizar configuração por chave
 router.put("/:chave", ConfiguracoesController.atualizar);
 
-// 👉 Upload da foto
+// 👉 Upload da foto (usando o upload do utils)
 router.post("/upload-foto", upload.single("foto"), ConfiguracoesController.uploadFoto);
 
 export default router;
