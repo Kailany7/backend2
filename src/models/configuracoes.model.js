@@ -1,32 +1,66 @@
-import db from "../config/database.js";
+import { supabase } from "../config/database.js";
 
 class ConfiguracoesModel {
+
+  // Buscar registro por chave
   async buscar(chave) {
-    const result = await db.query(
-      "SELECT * FROM configuracoes_foto WHERE chave = $1",
-      [chave]
-    );
-    return result.rows[0];
+    const { data, error } = await supabase
+      .from("configuracoes_foto")
+      .select("*")
+      .eq("chave", chave)
+      .single();
+
+    if (error && error.code !== "PGRST116") {
+      // código PGRST116 é "record not found"
+      console.error(error);
+      throw new Error("Erro ao buscar configuração");
+    }
+
+    return data || null;
   }
 
+  // Atualizar o valor
   async atualizar(chave, dados) {
-    const result = await db.query(
-      "UPDATE configuracoes_foto SET valor = $1, atualizado_em = NOW() WHERE chave = $2 RETURNING *",
-      [dados.valor, chave]
-    );
-    return result.rows[0];
+    const { data, error } = await supabase
+      .from("configuracoes_foto")
+      .update({
+        valor: dados.valor,
+        atualizado_em: new Date(),
+      })
+      .eq("chave", chave)
+      .select()
+      .single();
+
+    if (error) {
+      console.error(error);
+      throw new Error("Erro ao atualizar configuração");
+    }
+
+    return data;
   }
 
+  // Salvar a foto — insert or update
   async salvarFoto(chave, caminho) {
-    const result = await db.query(
-      `INSERT INTO configuracoes_foto (chave, valor, tipo, atualizado_em)
-       VALUES ($1, $2, 'imagem', NOW())
-       ON CONFLICT (chave) DO UPDATE SET valor = EXCLUDED.valor, atualizado_em = NOW()
-       RETURNING *`,
-      [chave, caminho]
-    );
+    const { data, error } = await supabase
+      .from("configuracoes_foto")
+      .upsert(
+        {
+          chave,
+          valor: caminho,
+          tipo: "imagem",
+          atualizado_em: new Date(),
+        },
+        { onConflict: "chave" }
+      )
+      .select()
+      .single();
 
-    return result.rows[0].valor;
+    if (error) {
+      console.error(error);
+      throw new Error("Erro ao salvar foto no banco");
+    }
+
+    return data.valor;
   }
 }
 

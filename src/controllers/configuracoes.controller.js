@@ -22,36 +22,43 @@ class ConfiguracoesController {
     }
   }
 
-  // MÉTODO RESPONSÁVEL POR UPLOAD DA FOTO
+  // ---------------------------- UPLOAD DA FOTO ----------------------------
   async uploadFoto(req, res) {
     try {
       if (!req.file) {
         return res.status(400).json({ error: "Nenhuma foto enviada." });
       }
 
-      // 👉 Usar apenas o filename
+      // Apenas filename, pois /uploads já é servido estaticamente
       const filename = req.file.filename;
+
+      // URL que será acessada pelo front-end
       const url = `http://localhost:3000/uploads/${filename}`;
 
+      // Salva no banco (via chave foto_perfil)
       const fotoUrl = await ConfigService.salvarFotoPerfil(url);
 
-      res.json({
+      return res.json({
         sucesso: true,
-        foto_url: fotoUrl
+        foto_url: fotoUrl,
       });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   }
 
+  // ---------------------------- BUSCAR FOTO ----------------------------
   async fotoPerfil(req, res) {
-  try {
-    const config = await ConfigService.buscarPorChave("foto_perfil");
-    res.json({ foto_url: config?.valor || null });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+    try {
+      const config = await ConfigService.buscarPorChave("foto_perfil");
+
+      return res.json({
+        foto_url: config?.valor || null,
+      });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
   }
-}
 }
 
 export default new ConfiguracoesController();
