@@ -11,6 +11,7 @@ export const AuthService = {
     if (!senhaValida) throw new Error("Senha incorreta");
 
     const token = generateToken({ id: user.id, email: user.email });
+
     return { token, user };
   },
 

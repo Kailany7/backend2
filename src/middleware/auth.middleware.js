@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 export function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
 
-  // Verifica se veio "Authorization: Bearer token"
   if (!authHeader) {
     return res.status(401).json({ erro: "Token não enviado." });
   }
@@ -12,10 +11,9 @@ export function authMiddleware(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    req.user = decoded; // adiciona os dados do usuário na requisição
-    next(); // segue para a rota
-  } catch (error) {
+    req.user = decoded;
+    next();
+  } catch {
     return res.status(401).json({ erro: "Token inválido ou expirado." });
   }
 }

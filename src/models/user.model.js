@@ -1,6 +1,7 @@
-import { supabase } from "../config/supabase.js";
+import { supabase } from "../config/supabaseClient.js";
 
 export const UserModel = {
+
   async findByEmail(email) {
     const { data, error } = await supabase
       .from("usuarios")
@@ -8,27 +9,20 @@ export const UserModel = {
       .eq("email", email)
       .single();
 
-    if (error) {
-      return null;
-    }
-
-    return data; // contém { id, nome, email, senha, criado_em }
+    if (error) return null;
+    return data;
   },
 
-  async createUser(nome, email, senhaCriptografada) {
+  async createUser(nome, email, senha) {
     const { data, error } = await supabase
       .from("usuarios")
-      .insert([
-        {
-          nome,
-          email,
-          senha: senhaCriptografada
-        }
-      ])
+      .insert([{ nome, email, senha }])
       .select()
       .single();
 
-    if (error) return null;
+    if (error) {
+      throw new Error(error.message);
+    }
 
     return data;
   }
