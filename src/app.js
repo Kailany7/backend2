@@ -1,24 +1,25 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-
-import authRoutes from "./routes/auth.routes.js";
+import path from "path";
 
 dotenv.config();
+
+import authRoutes from "./routes/auth.routes.js";
+import colaboradorRoutes from "./routes/colaborador.routes.js";
+import configuracoesRoutes from "./routes/configuracoes.routes.js";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.status(200).send("✅ Backend está rodando!");
-});
-
+// Rotas API
 app.use("/api/auth", authRoutes);
+app.use("/api/colaboradores", colaboradorRoutes);
+app.use("/api/configuracoes", configuracoesRoutes);
 
-const PORT = process.env.PORT || 3000;
+// SERVE A PASTA UPLOADS NA RAIZ
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
-app.listen(PORT, () => {
-  console.log(`✅ Servidor rodando na porta ${PORT}`);
-});
+export default app;

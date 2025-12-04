@@ -1,4 +1,5 @@
-import { supabase } from "../config/database.js";
+import { supabase } from "../config/supabaseClient.js";
+
 
 class ConfiguracoesModel {
 
